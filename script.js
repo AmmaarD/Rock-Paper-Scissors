@@ -13,48 +13,37 @@ function getComputerChoice() {
     }   
 }
 
-function getHumanChoice() {
-    let humanChoice = ""
-
-    while (humanChoice !== "rock" && humanChoice !== "paper" && humanChoice !== "scissors" ) {
-        humanChoice = prompt("Enter rock, paper, or scissors:").toLowerCase();
-    }
-    return humanChoice;
-    
+function getHumanChoice(e) {
+    let humanChoice = e.target.innerText;
+    playRound(humanChoice, getComputerChoice());
 }
 
-function playGame() {
-    let humanScore = 0;
-    let computerScore = 0;
+let buttons = document.querySelectorAll("button");
+buttons.forEach((btn) => {
+    btn.addEventListener("click", getHumanChoice);
+});
 
-    function playRound(humanChoice, computerChoice) {
-        if (computerChoice === "rock" && humanChoice === "scissors" || computerChoice === "paper" && humanChoice === "rock" || computerChoice === "scissors" && humanChoice === "paper") {
-            computerScore++;
-            console.log("Computer's "+computerChoice + " beats Human's "+ humanChoice + ". Computer wins!");
-        }
-        else if (computerChoice === "rock" && humanChoice === "paper" || computerChoice === "paper" && humanChoice === "scissors" || computerChoice === "scissors" && humanChoice === "rock") {
-            humanScore++;
-            console.log("Human's " + humanChoice+ " beats Computer's " + computerChoice + ". Human wins!");
-        }else{
-            console.log("Tie! "+humanChoice+" vs "+computerChoice);
-        }
-        console.log("Score (Computer:Human): "+computerScore.toString()+":"+humanScore.toString());
+let computerScore=0;
+let humanScore=0;
+
+function playRound(humanChoice, computerChoice) {
+    let roundResultTxt = "";
+    if (computerChoice === "rock" && humanChoice === "scissors" || computerChoice === "paper" && humanChoice === "rock" || computerChoice === "scissors" && humanChoice === "paper") {
+        computerScore++;
+        roundResultTxt = "Computer's "+computerChoice + " beats Human's "+ humanChoice + ". Computer wins!";
     }
-
-    //Number of Rounds to be played
-    for(let i=0; i < 5; i++) {
-        let humanSelection = getHumanChoice();
-        let computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
-    }
-
-    if(computerScore > humanScore) {
-        console.log("Computer wins! "+computerScore+" to "+humanScore);
-    }if(computerScore < humanScore) {
-        console.log("Human wins! "+humanScore+" to "+computerScore);
+    else if (computerChoice === "rock" && humanChoice === "paper" || computerChoice === "paper" && humanChoice === "scissors" || computerChoice === "scissors" && humanChoice === "rock") {
+        humanScore++;
+        roundResultTxt = "Human's " + humanChoice+ " beats Computer's " + computerChoice + ". Human wins!";
     }else{
-        console.log("Tie! "+humanScore+" to "+computerScore);
+        roundResultTxt = "Tie! "+humanChoice+" vs "+computerChoice;
     }
+
+    let roundResult = document.querySelector(".roundResult");
+    roundResult.innerText = roundResultTxt;
+    
+    let score = document.querySelector(".score");
+    score.innerText = "Score (Computer:Human): "+computerScore.toString()+":"+humanScore.toString();
+    //console.log("Score (Computer:Human): "+computerScore.toString()+":"+humanScore.toString());
 }
 
-playGame();
